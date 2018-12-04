@@ -33,7 +33,7 @@ results = foreach(sigma = c(0.25, 0.5, 1)) %dopar% {
   library(tidyverse)
   library(parallel)
   
-  source('ps4_q2_funcs.R')
+  source('/home/iaosui/stats506/Stats506_F18/pbs/problemset4/ps4_q2_funcs.R')
   # Build x_sigma by given rho and then generate X randomly by x_sigma: ---------
   n = 1000
   p = 100
