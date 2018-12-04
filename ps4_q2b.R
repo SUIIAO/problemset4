@@ -18,7 +18,7 @@ library(doParallel)
 
 # sources ps4_q2_funcs.R to get functions from part a and c of PS3 Q2 and 
 # function "method"
-source('ps4_q2_funcs.R')
+source('/home/iaosui/stats506/Stats506_F18/pbs/problemset4/ps4_q2_funcs.R')
 
 # Setup a 4 core cluster using doParallel
 ncores = 4  
@@ -78,3 +78,6 @@ results = foreach(sigma = c(0.25, 0.5, 1)) %dopar% {
 
 stopCluster(cl)
 
+results_q4b = rbind(results[[1]], results[[2]]) 
+results_q4b = rbind(results_q4b, results[[3]]) 
+save(results_q4b, file="results_q4b.Rdata") 

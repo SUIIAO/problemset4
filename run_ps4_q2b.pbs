@@ -1,0 +1,20 @@
+#!/bin/sh
+#PBS -N ps4_q2ab 
+#PBS -M iaosui@umich.edu 
+#PBS -m abe 
+#PBS -j oe
+#PBS -V  
+
+#PBS -l walltime=00:30:00
+#PBS -l nodes=1:ppn=2 
+#PBS -l procs=5
+#PBS -l pmem=4Gb  
+#PBS -q flux 
+#PBS -A stats_flux 
+#PBS -l qos=flux
+#PBS -o /home/iaosui/stats506/Stats506_F18/pbs/problemset4
+
+path=/home/iaosui/stats506/Stats506_F18/pbs/problemset4
+module load R
+R CMD BATCH $path/ps4_q2a.R $path/ps4_q2a.Rout
+R CMD BATCH $path/ps4_q2b.R $path/ps4_q2b.Rout
