@@ -12,8 +12,7 @@
 #PBS -A stats_flux 
 #PBS -l qos=flux
 
+
 module load R
-for sigma in 0.25 0.5 1; do
- Rscript ps4_q2c.R sigma=$sigma mcrep=1e4 n_cores=4 \
-   >> ps4_q2c-${PBS_ARRAYID}.Rout
-done
+ Rscript ps4_q2c.R sigma=1 mcrep=1e4 n_cores=4 \
+   >> ps4_q2c-test.Rout
