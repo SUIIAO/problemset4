@@ -92,7 +92,7 @@ evaluation = mclapply(p_value, method, indices = which(beta != 0))
 results_q4c = data.table()
 for (i in c(-3:3)) {
   c = data.table(rho = i*0.25, sigma = sigma, evaluation[[i+4]])
-  if(length(results_q4a) == 0)
+  if(length(results_q4c) == 0)
     results_q4c = c
   else
     results_q4c = rbind(results_q4c, c)
