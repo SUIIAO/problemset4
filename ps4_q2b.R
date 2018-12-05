@@ -25,7 +25,6 @@ ncores = 4
 cl = makeCluster(ncores)
 registerDoParallel(cl)
 
-results_q4b = data.table()
 ## do parallel computaitons with foreach
 results = foreach(sigma = c(0.25, 0.5, 1)) %dopar% {
   library(data.table)
@@ -75,6 +74,9 @@ results = foreach(sigma = c(0.25, 0.5, 1)) %dopar% {
   }
   results_q4a
 }
-
 stopCluster(cl)
 
+results_q4b = rbind(results[[1]], results[[2]])
+results_q4b = rbind(results_q4b, results[[3]])
+save(results_q4b, file="results_q4b.Rdata")
+     

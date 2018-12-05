@@ -1,47 +1,42 @@
 
 ## functions from part a of PS3 Q2
 z_test = function(X, beta, sigma = 1, mc_rep = 100){
-  # function to test whether beta is equal to 0 by z-test
+  # Simulate Y from Y|X ~ N(XB, sigma^2 I) and compute p-values corresponding to
+  # Wald tests for B != 0. Repeat mc_rep times.
   #
-  # Args:
-  #  X: a n*p matrix has the distribution N(0, SIGMA)
-  #  beta: the true coefficients of X by p and 1 matrix
-  #  sigma: the error variance of Y and the default value is 1
-  #  mc_rep: the number of Monte Carlo replicates and here mc_rep = 100
-  #  
-  # Details: 
-  #  use the norm to create sigma for mc_rep times to test whether z-test
-  #  precise enough to judge whether beta = 0.
+  # Arguments:
+  #   X : an n by p numeric matrix
+  #   beta: a p by 1 numeric matrix
+  #   sigma: std deviation for Y|X,  Y|X ~ N(XB, sigma^2 I)
+  #   mc_rep: The number of Monte Carlo replications to use
   #
-  # Returns: 
-  #  a p-value matrix from beta_1 to beta_p with mc_rep times different result.
+  # Output: A p by mc_rep matrix of p-values
   
-  # Get basic data of X and beta : --------------------------------------------
-  n = dim(X)[1]
-  p = dim(X)[2]
+  # This part doesn't need to change for each replication
+  QR = qr( crossprod(X) )
+  QX = X %*% qr.Q(QR) 
+  XtXinv = solve( qr.R(QR), t( qr.Q(QR) ))
   
-  p_value = rep(0, p * mc_rep)
-  dim(p_value) = c(p, mc_rep)
-  for (i in 1:mc_rep) {
-    # Compute y: ----------------------------------------------------------------
-    Y = X %*% beta + sigma * rnorm(n)
-    
-    # Use QR Decomposition to calculate the beta_hat: ---------------------------
-    QR = qr(t(X) %*% X)
-    R = qr.R(QR)
-    Q = qr.Q(QR)
-    beta_hat = solve(qr.R(QR), t(qr.Q(QR)) %*% t(X) %*% Y)
-    
-    # Use Y and Y_hat=X*¦Â_hat to estimate the error variance for each Monte Carlo
-    # trial m
-    sigma_hat = sum((Y - X %*% beta_hat)^2) / (n - p)
-    
-    # Calculate the p-value: ------------------------------------------------------
-    v = sigma_hat * diag(chol2inv(chol(t(X) %*% X)))
-    z = beta_hat / sqrt(v)
-    p_value[,i] = 2 * (1 - pnorm(abs(z)))
-  }
-  return(p_value)
+  n = nrow(X)
+  p = ncol(X)
+  
+  # Generate mc_rep copies of Y at once, each in a column.
+  Y = as.numeric(X %*% beta) + rnorm(n*mc_rep)
+  dim(Y) = c(n, mc_rep)
+  
+  # estimate betas and residual standard errors
+  b = solve(qr.R(QR), crossprod( QX, Y ) )
+  
+  # It's okay if you divide by {n - p} outside the sum, but this
+  # is more comparable to what is done by .lm.fit()
+  s_sq = colSums( {Y - as.numeric(X %*% b)}^2 / {n - p})
+  
+  # standard error of b
+  v = sqrt( diag(XtXinv) * rep(s_sq, each = p) )
+  
+  # return a matirx of p-values
+  # Use pt to replicate lm, but the normal approximation is fine here. 
+  matrix( 2*pt( abs( b / v ), df = {n-p}, lower.tail = FALSE ), p, mc_rep )  
 }
 
 
