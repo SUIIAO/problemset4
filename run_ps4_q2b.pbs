@@ -5,14 +5,12 @@
 #PBS -j oe
 #PBS -V  
 
-#PBS -l walltime=00:15:00
+#PBS -l walltime=02:00:00
 #PBS -l procs=4
 #PBS -l pmem=1000mb  
 #PBS -q flux 
 #PBS -A stats_flux 
 #PBS -l qos=flux
-#PBS -o /home/iaosui/stats506/Stats506_F18/pbs/problemset4
 
-path=/home/iaosui/stats506/Stats506_F18/pbs/problemset4
 module load R
-R CMD BATCH $path/ps4_q2b.R $path/ps4_q2b.Rout
+R CMD BATCH ps4_q2b.R ps4_q2b.Rout
