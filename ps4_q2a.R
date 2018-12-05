@@ -16,7 +16,7 @@ library(parallel)
 # "rho", "sigma", "metric", "method", "est", and "se". 
 
 # sources ps4_q2_funcs.R to get function from part a and c of PS3 Q2
-source('ps4_q2_funcs.R')
+source('/home/iaosui/stats506/Stats506_F18/pbs/problemset4/ps4_q2_funcs.R')
 
 # Build x_sigma by given rho and then generate X randomly by x_sigma: ---------
 n = 1000
